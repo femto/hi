@@ -2,7 +2,7 @@
 
 loop over all files (ignoring directories) in first argument(first argument is a directory)
 
-move each file into a subdirectory in the format year-month
+move each file into the subdirectory of first argument in the format year-month
 
 while the task is running show an ascii loading spinner
 
