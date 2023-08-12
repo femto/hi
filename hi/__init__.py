@@ -39,10 +39,11 @@ def main():
 
     if len(sys.argv) >=3 and sys.argv[1] == "cache" and sys.argv[2] == "clear":
 
+
         for file in os.listdir(CACHE_DIR):
             os.remove(os.path.join(CACHE_DIR, file))
-            sys.exit(0)
-        
+
+        sys.exit(0)
 
 
     hiscript_path = sys.argv[1]

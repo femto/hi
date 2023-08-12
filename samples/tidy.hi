@@ -1,0 +1,10 @@
+#!/usr/bin/env hi
+
+loop over all files (ignoring directories) in $home/Screenshots
+
+move each file into a subdirectory in the format year-month
+
+while the task is running show an ascii loading spinner
+
+show how many files where moved
+
