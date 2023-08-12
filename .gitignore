@@ -2,3 +2,5 @@
 *.bak
 .aider
 .DS_STORE
+__pycache__
+dist
