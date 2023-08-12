@@ -4,7 +4,7 @@
 >
 hi runs your natural language
 
-### Install humanscript
+### Install hicript
 hi script is provided in python-hi pip package
 ```shell
 pip install -U python-hi
@@ -73,6 +73,12 @@ HI_MODEL: gpt-4
 ```
 
 Now you can run hi script either from command line or as an shellbang interpreter(check out samples/*.hi)
+
+### Samples Description
+list.hi,progressbar.hi,spinner.hi should be self explanatory, tidy.hi tidys a directory by file's date(year-month)
+```shell
+./tidy.hi some_dir
+```
 
 ### Cache invalidation
 after you first run the script, the converted bash code will be cached in ~/.hicache/ , you can run
