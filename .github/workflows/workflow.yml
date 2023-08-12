@@ -30,4 +30,4 @@ jobs:
           echo "[pypi]" > ~/.config/pypoetry/config.toml
           echo "token = '$POETRY_PYPI_TOKEN'" >> ~/.config/pypoetry/config.toml
           poetry build
-          poetry publish --build -n  # Remove -n flag for actual publishing
+          poetry publish --build # Remove -n flag for actual publishing
