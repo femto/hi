@@ -1,6 +1,6 @@
 #!/usr/bin/env hi
 
-loop over all files (ignoring directories) in $home/Screenshots
+loop over all files (ignoring directories) in first argument(first argument is a directory)
 
 move each file into a subdirectory in the format year-month
 
