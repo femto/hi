@@ -5,6 +5,12 @@ import subprocess
 import sys
 import requests
 import yaml
+import re
+
+def sanitize_for_filename(input_str):
+    # Remove invalid characters for file names using regular expression
+    return re.sub(r'[\/:*?"<>|]', '_', input_str)
+
 
 # Setup filesystem
 CONFIG_FILE = os.path.join(os.getenv("HOME"), ".hi")
@@ -59,8 +65,9 @@ def run_command():
         hiscript = ' '.join(sys.argv[1:])
         # Execute from cache if we have a hit
         script_name = '-'.join(sys.argv[1:])
+        sanitized_script_name = sanitize_for_filename(script_name)
 
-        execute(hiscript, script_name)
+        execute(hiscript, sanitized_script_name)
 
 
 def execute(hiscript, script_name):
