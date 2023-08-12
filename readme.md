@@ -4,7 +4,7 @@
 >
 hi runs your natural language
 
-### Install hicript
+### Install hiscript
 hi script is provided in python-hi pip package
 ```shell
 pip install -U python-hi
