@@ -25,12 +25,13 @@ since ? is special character in shell, if you want to use ?, just add quotation 
 hi "could you list current dir?"
 ```
 hi can also be used as shellbang interpreter
+create a file: progressbar.hi
 ```shell
-progressbar.hi
 #!/usr/bin/env hi
 could you display a progress bar from 1 to 100?
 ```
-
+and chmod +x ./progressbar.hi
+then ./progressbar.hi
 It can be executed like any other script.
 
 ```shell
