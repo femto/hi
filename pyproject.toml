@@ -1,9 +1,10 @@
 [tool.poetry]
-name = "hi"
+name = "python-hi"
 version = "0.1.0"
 description = ""
 authors = ["femto <femtowin@gmail.com>"]
 readme = "README.md"
+packages = [{include = "hi"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
