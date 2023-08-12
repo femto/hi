@@ -4,6 +4,10 @@
 >
 hi runs your natural language
 
+You can see it in action here:
+
+![](samples/animation.svg)
+
 ### Install hiscript
 hi script is provided in python-hi pip package
 ```shell
