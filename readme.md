@@ -4,6 +4,18 @@
 >
 hi runs your natural language
 
+### Install humanscript
+hi script is provided in python-hi pip package
+```shell
+pip install -U python-hi
+```
+
+you can also clone this repository and run "poetry install"
+
+> Be careful The converted bash can contain weird things.
+> you can run hi script initially with HI_EXECUTE=false
+> to check the resulting code before executing.
+
 ## Example
 ```
 hi could you list current dir
@@ -26,8 +38,6 @@ $ ./progressbar.hi
 
 ```
 
-
-
 ```shell
 #!/usr/bin/env bash
 
@@ -42,77 +52,46 @@ done
 echo "Complete!"%  
 ```
 
-The code is streamed out of the LLM during inferpretation and executed line by line so execution is not blocked waiting for inference to finish. The generated code is cached on first run and will be executed instantly on subsequent runs, bypassing the need for reinferpretation.
+The code is sent to LLM and then convert to bash and then execute, while also cache for next time fast reexecute(then it doesn't 
+need to query the LLM again)
 
-You can see it in action here:
 
-![](demo.svg)
 
 ## Usage
 
-### Install humanscript
 
-You can run humanscript in a sandboxed environment via Docker:
 
-```shell
-docker run -it lukechilds/humanscript
+### Config hi
+
+We need to add it to `~/.hi`
+
+```
+HI_API_KEY: sk-xxx
+HI_MODEL: gpt-4
+#HI_API: if you have a different base to forward other than https://api.openai.com/v1, it's set using openai.openai_api_base=this value
 ```
 
-Alternatively you can install it natively on your system with Homebrew:
+Now you can run hi script either from command line or as an shellbang interpreter(check out samples/*.hi)
 
+### Cache invalidation
+after you first run the script, the converted bash code will be cached in ~/.hicache/ , you can run
 ```shell
-brew install lukechilds/tap/humanscript
+hi cache clear
+```
+to completely clear the cache.
+
+### Configuration that can change runtime behavior
+you can set the following variables in ~/.hi(in yaml format) or use in command line like 
+```shell
+$ HI_API_KEY="sk-xxx" hi ...
+```
+### `HI_EXECUTE`
+you can use HI_EXECUTE to control the execution of the hi script
+```shell
+$ HI_EXECUTE="false" hi ...
 ```
 
-Or manually install by downloading this repository and copy/symlink `humanscript` into your PATH.
-
-> Be careful if you're running humanscript unsandboxed. The inferpreter can sometimes do weird and dangerous things. Speaking from experience, unless you want to be doing a system restore at 2am on a saturday evening, you should atleast run humanscripts initially with `HUMANSCRIPT_EXECUTE="false"` so you can check the resulting code before executing.
-
-### Write and execute a humanscript
-
-humanscript is configured out of the box to use OpenAI's GPT-4, you just need to add your API key.
-
-We need to add it to `~/.humanscript/config`
-
-```shell
-mkdir -p ~/.humanscript/
-echo 'HUMANSCRIPT_API_KEY="<your-openai-api-key>"' >> ~/.humanscript/config
-```
-
-Now you can create a humanscript and make it executable.
-
-```shell
-echo '#!/usr/bin/env humanscript
-print an ascii art human' > asciiman
-chmod +x asciiman
-```
-
-And then execute it.
-
-```shell
-./asciiman
-  O
- /|\
- / \
-```
-
-## Configuration
-
-All environment variables can be added to `~/.humanscript/config` to be applied globally to all humanscripts:
-
-```shell
-$ cat ~/.humanscript/config
-HUMANSCRIPT_API_KEY="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-HUMANSCRIPT_MODEL="gpt-4"
-```
-
-or on a per script basis:
-
-```shell
-$ HUMANSCRIPT_REGENERATE="true" ./asciiman
-```
-
-### `HUMANSCRIPT_API`
+### `HI_API`
 
 Default: `https://api.openai.com/v1`
 
@@ -121,53 +100,61 @@ A server following OpenAI's Chat Completion API.
 Many local proxies exist that implement this API in front of locally running LLMs like Llama 2. [LM Studio](https://lmstudio.ai/) is a good option.
 
 ```shell
-HUMANSCRIPT_API="http://localhost:1234/v1"
+HI_API="http://localhost:1234/v1"
 ```
 
-### `HUMANSCRIPT_API_KEY`
+### `HI_API_KEY`
 
 Default: `unset`
 
 The API key to be sent to the LLM backend. Only needed when using OpenAI.
 
 ```shell
-HUMANSCRIPT_API_KEY="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+HI_API_KEY="sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 ```
 
-### `HUMANSCRIPT_MODEL`
+### `HI_MODEL`
 
 Default: `gpt-4`
 
 The model to use for inference.
 
 ```shell
-HUMANSCRIPT_MODEL="gpt-3.5"
+HI_MODEL="gpt-3.5"
 ```
 
-### `HUMANSCRIPT_EXECUTE`
+### `HI_EXECUTE`
 
 Default: `true`
 
-Whether or not the humanscript inferpreter should automatically execute the generated code on the fly.
+Whether or not the hi interpreter should automatically execute the generated code on the fly.
 
 If false the generated code will not be executed and instead be streamed to stdout.
 
 ```shell
-HUMANSCRIPT_EXECUTE="false"
+HI_EXECUTE="false"
 ```
 
-### `HUMANSCRIPT_REGENERATE`
+### `HI_REGENERATE`
 
 Default: `false`
 
-Whether or not the humanscript inferpreter should regenerate a cached humanscript.
+Whether or not the hi interpreter should regenerate a cached hiscript.
 
-If true the humanscript will be reinferpreted and the cache entry will be replaced with the newly generated code. Due to the nondeterministic nature of LLMs each time you reinferpret a humanscript you will get a similar but slightly different output.
+If true the hiscript will be reinterpreted and the cache entry will be replaced with the newly generated code. Due to the nondeterministic nature of 
+LLMs each time you reinferpret a hiscript you will get a similar but slightly different output.
 
 ```shell
-HUMANSCRIPT_REGENERATE="true"
+HI_REGENERATE="true"
 ```
+
+## Inspiration
+This project is highly inspired by humanscript project(https://github.com/lukechilds/humanscript), but I think hi is a better name,
+also hi can be interpreted as short for human input, human inteprete,human interface, human inferenceinterpreter etc,
+and just for fun.
+Also using python is easier for plugin architecture, the way I think is in different project/workspace, maybe there will be
+different 'hi' implementations, so .hi in that directory with plugin_type="metagpt" will run some metagpt command at that directory.
 
 ## License
 
-MIT © Luke Childs
+MIT © femto Zheng

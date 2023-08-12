@@ -25,11 +25,11 @@ if os.path.exists(CONFIG_FILE):
     with open(CONFIG_FILE, 'r') as f:
         config = yaml.safe_load(f)
 
-HI_API_KEY = config.get("HI_API_KEY", "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-HI_MODEL = config.get("HI_MODEL", "gpt-4")
-HI_API = config.get("HI_API", "https://api.openai.com/v1")
-HI_EXECUTE = config.get("HI_EXECUTE", "true")
-HI_REGENERATE = config.get("HI_REGENERATE", "false")
+HI_API_KEY = os.getenv("HI_API_KEY", config.get("HI_API_KEY", "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"))
+HI_MODEL = os.getenv("HI_MODEL", config.get("HI_MODEL", "gpt-4"))
+HI_API = os.getenv("HI_API", config.get("HI_API", "https://api.openai.com/v1"))
+HI_EXECUTE = os.getenv("HI_EXECUTE", config.get("HI_EXECUTE", "true"))
+HI_REGENERATE = os.getenv("HI_REGENERATE", config.get("HI_REGENERATE", "false"))
 def main():
 
     # Read the script passed to the interpreter
@@ -76,10 +76,12 @@ def execute(hiscript, script_name):
     if HI_REGENERATE == "true" and os.path.exists(script_cache_path):
         os.remove(script_cache_path)
     if os.path.exists(script_cache_path):
+
         if HI_EXECUTE == "true":
             subprocess.run(['bash', script_cache_path] + sys.argv[2:])
         else:
             with open(script_cache_path, 'r') as f:
+                #breakpoint()
                 print(f.read())
         sys.exit()
     # System prompt
